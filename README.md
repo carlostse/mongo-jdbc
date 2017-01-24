@@ -1,7 +1,7 @@
 Mongo JDBC Driver
 ===========
 
-A JDBC driver for MongoDB.
+JDBC driver for MongoDB. A wrapper translates SQL to official MongoDB Java API calls.
 
 This is a fork of http://github.com/erh/mongo-jdbc, and merged some changes from:
 - https://github.com/davemc/mongo-jdbc
@@ -21,7 +21,8 @@ a JDBC driver has been made. The JDBC application can use the traditional SQL to
 - [x] support __SELECT__ on single table
 - [x] support __WHERE__
 - [x] support __ORDER BY__ and __LIMIT__
-- [ ] upgrade Mongo Java Driver to 3.x
+- [x] upgrade Mongo Java Driver to latest version (3.4.1)
+- [ ] replace deprecated Mongo Java Driver API
 
 ## Platform
 
