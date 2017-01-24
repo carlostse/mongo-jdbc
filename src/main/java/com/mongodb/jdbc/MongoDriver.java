@@ -16,22 +16,24 @@
 
 package com.mongodb.jdbc;
 
-import com.mongodb.DBAddress;
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
+import com.mongodb.*;
+
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MongoDriver implements Driver {
 
-    static final String PREFIX = "mongodb://";
+    private static final String connection_pattern = "jdbc:(mongodb://[^/]+)/(\\w+)";
+    private static final Pattern jdbc_regex = Pattern.compile(connection_pattern);
 
     static {
         try {
@@ -47,24 +49,24 @@ public class MongoDriver implements Driver {
 
     @Override
     public boolean acceptsURL(String url) {
-        return url.startsWith(PREFIX);
+        Matcher matcher = jdbc_regex.matcher(url);
+        return matcher.find();
     }
 
     @Override
     public Connection connect(String url, Properties info) throws SQLException {
+
         if (info != null && info.size() > 0)
             throw new UnsupportedOperationException("properties not supported yet");
 
-        if (url.startsWith(PREFIX))
-            url = url.substring(PREFIX.length());
-
-        if (!url.contains("/"))
-            throw new MongoSQLException("bad url: " + url);
-
-
-        DBAddress addr = new DBAddress(url);
-        return new MongoConnection(new MongoClient(addr).getDB(addr.getDBName()));
+        Matcher matcher = jdbc_regex.matcher(url);
+        // If the regular expression matches, returns MongoConnection
+        if (matcher.find())
+            return new MongoConnection(new MongoClient(new MongoClientURI(matcher.group(1))).getDB(matcher.group(2)));
+        // Nothing returned, throw exception of invalid connection string
+        throw new MongoSQLException("Invalid connection string: " + url);
     }
+
 
     @Override
     public int getMajorVersion() {

@@ -19,6 +19,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class First {
 
@@ -26,7 +28,7 @@ public class First {
         System.out.println(name);
         while (res.next()) {
             System.out.println(
-                    "\t" + res.getString("name") +
+                    "\t" + res.getString("email") +
                     "\t" + res.getInt("age") +
                     "\t" + res.getObject(0)
             );
@@ -37,29 +39,30 @@ public class First {
 
         Class.forName("com.mongodb.jdbc.MongoDriver");
 
-        Connection c = DriverManager.getConnection("mongodb://127.0.0.1:27017/test");
+        Connection c = DriverManager.getConnection("jdbc:mongodb://127.0.0.1:27017,slave:27017/test");
 
         Statement stmt = c.createStatement();
 
-        // drop old table
-        stmt.executeUpdate("DROP TABLE people");
-
-        // insert some data
-        stmt.executeUpdate("INSERT INTO people (name, age) VALUES ('Eliot' , 30)");
-        stmt.executeUpdate("INSERT INTO people (name, age) VALUES ('Sara'  , 12)");
-        stmt.executeUpdate("INSERT INTO people (name, age) VALUES ('Jaime' , 28)");
-
-        String baseSQL = "SELECT name, age FROM people";
+//        // drop old table
+//        stmt.executeUpdate("DROP TABLE people");
+//
+//        // insert some data
+//        stmt.executeUpdate("INSERT INTO people (name, age) VALUES ('Eliot' , 30)");
+//        stmt.executeUpdate("INSERT INTO people (name, age) VALUES ('Sara'  , 12)");
+//        stmt.executeUpdate("INSERT INTO people (name, age) VALUES ('Jaime' , 28)");
+//
+//        String baseSQL = "SELECT name, age FROM people";
+        String baseSQL = "SELECT * FROM CISPUsers_Token_Auth;";
 
         // query
         print("not sorted", stmt.executeQuery(baseSQL));
-        print("where", stmt.executeQuery(baseSQL + " WHERE name = 'Eliot'"));
-        print("sorted by age", stmt.executeQuery(baseSQL + " ORDER BY age"));
-        print("sorted by age desc", stmt.executeQuery(baseSQL + " ORDER BY age DESC LIMIT 2,1"));
+//        print("where", stmt.executeQuery(baseSQL + " WHERE name = 'Eliot'"));
+//        print("sorted by age", stmt.executeQuery(baseSQL + " ORDER BY age"));
+//        print("sorted by age desc", stmt.executeQuery(baseSQL + " ORDER BY age DESC LIMIT 2,1"));
 
-        // update
-        stmt.executeUpdate("UPDATE people SET age = 32 WHERE name = 'Jaime'");
-        print("after update", stmt.executeQuery(baseSQL + " ORDER BY age DESC"));
+//        // update
+//        stmt.executeUpdate("UPDATE people SET age = 32 WHERE name = 'Jaime'");
+//        print("after update", stmt.executeQuery(baseSQL + " ORDER BY age DESC"));
     }
 
 } 
