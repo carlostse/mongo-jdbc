@@ -22,7 +22,7 @@ import java.sql.Statement;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class First {
+public class HelloWorld {
 
     static void print(String name, ResultSet res) throws SQLException {
         System.out.println(name);

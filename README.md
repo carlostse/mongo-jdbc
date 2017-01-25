@@ -26,8 +26,15 @@ Query Types
 - [x] support __SELECT__ on single table
 - [x] support __WHERE__
 - [x] support __ORDER BY__ and __LIMIT__
-- [x] upgrade Mongo Java Driver to latest version (3.4.1)
-- [ ] replace deprecated Mongo Java Driver API
+- [x] upgrade [Java MongoDB Driver](https://docs.mongodb.com/ecosystem/drivers/java/) to latest version (3.4.1)
+- [x] support MongoDB replica set
+- [ ] replace deprecated Java MongoDB Driver APIs
+
+## Quick Start
+
+1. Import the `pom.xml` in [IntelliJ IDEA](https://www.jetbrains.com/idea/)
+2. Right click __examples__ and select __Mark Directory as__, __Sources Root__
+4. Right click `HelloWorld` and select __Run HelloWorld.main()__
 
 ## Platform
 
@@ -36,7 +43,7 @@ Query Types
 This project targets to support Java 8. Some additional JDBC functions were added since Java 7,
 thus which may cause errors where compiling using Java 6 or below, and it is not supported in this project.
 
-### Build
+### Build JDBC JAR
 
 ```
 $ mvn package -Dmaven.test.skip=true
