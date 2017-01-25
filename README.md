@@ -18,6 +18,11 @@ a JDBC driver has been made. The JDBC application can use the traditional SQL to
 
 ## Project Scope
 
+JDBC Connection
+- [x] support connection to a ReplicaSet
+- [ ] support connection to a Sharded Cluster
+
+Query Types
 - [x] support __SELECT__ on single table
 - [x] support __WHERE__
 - [x] support __ORDER BY__ and __LIMIT__

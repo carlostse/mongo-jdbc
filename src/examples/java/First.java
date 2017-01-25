@@ -19,6 +19,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class First {
 
@@ -26,7 +28,7 @@ public class First {
         System.out.println(name);
         while (res.next()) {
             System.out.println(
-                    "\t" + res.getString("name") +
+                    "\t" + res.getString("email") +
                     "\t" + res.getInt("age") +
                     "\t" + res.getObject(0)
             );
@@ -37,7 +39,7 @@ public class First {
 
         Class.forName("com.mongodb.jdbc.MongoDriver");
 
-        Connection c = DriverManager.getConnection("mongodb://127.0.0.1:27017/test");
+        Connection c = DriverManager.getConnection("jdbc:mongodb://127.0.0.1:27017,slave:27017/test");
 
         Statement stmt = c.createStatement();
 
