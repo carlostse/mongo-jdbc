@@ -3,7 +3,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.copperoxide.mongo-jdbc</groupId>
+    <groupId>com.github.carlostse.mongo-jdbc</groupId>
     <artifactId>mongodb-jdbc</artifactId>
     <packaging>jar</packaging>
     <name>MongoDB - JDBC Driver</name>
@@ -25,8 +25,10 @@
         </license>
     </licenses>
 
-    <url>https://github.com/copperoxide/mongo-jdbc</url>
-    <scm><url>https://github.com/copperoxide/mongo-jdbc</url></scm>
+    <url>https://github.com/carlostse/mongo-jdbc</url>
+    <scm>
+        <url>https://github.com/carlostse/mongo-jdbc</url>
+    </scm>
 
     <dependencies>
 
@@ -46,18 +48,33 @@
             <groupId>net.sf.jsqlparser</groupId>
             <artifactId>jsqlparser</artifactId>
             <version>0.8.0</version>
-            <type>jar</type>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
-            <type>jar</type>
             <scope>test</scope>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>fully.qualified.MainClass</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

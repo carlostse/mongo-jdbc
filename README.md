@@ -29,6 +29,7 @@ Query Types
 - [x] upgrade [Java MongoDB Driver](https://docs.mongodb.com/ecosystem/drivers/java/) to latest version (3.4.1)
 - [x] support MongoDB replica set
 - [ ] replace deprecated Java MongoDB Driver APIs
+- [ ] update test cases
 
 ## Quick Start
 
@@ -45,13 +46,32 @@ thus which may cause errors where compiling using Java 6 or below, and it is not
 
 ### Build JDBC JAR
 
+If you have MongoDB running on localhost
+
+```
+$ mvn package
+```
+
+If you have MongoDB running on remote machine
+
+```
+$ mvn package -Dmongodb=<MongoDB Hostname or IP address(:port)>
+```
+
+If you do have any MongoDB or want to skip the tests
+
 ```
 $ mvn package -Dmaven.test.skip=true
 ```
 
-Or, if you have a testing MongoDB instance running on localhost and listening to port 27017, you can
+You need to add the following dependency JARs in classpath
+- `mongo-java-driver-<version>.jar`
+- `jsqlparser-<version>.jar`
+
+Or, you can package all dependencies in one single JAR file
+
 ```
-$ mvn package
+$ mvn assembly:single
 ```
 
 ## License

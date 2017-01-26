@@ -24,13 +24,13 @@ import java.util.regex.Pattern;
 
 public class HelloWorld {
 
-    static void print(String name, ResultSet res) throws SQLException {
+    static void print(String name, ResultSet rs) throws SQLException {
         System.out.println(name);
-        while (res.next()) {
+        while (rs.next()) {
             System.out.println(
-                    "\t" + res.getString("email") +
-                    "\t" + res.getInt("age") +
-                    "\t" + res.getObject(0)
+                    "\t" + rs.getString("email") +
+                    "\t" + rs.getInt("age") +
+                    "\t" + rs.getObject(0)
             );
         }
     }

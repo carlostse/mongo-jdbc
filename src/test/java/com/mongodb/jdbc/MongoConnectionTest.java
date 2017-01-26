@@ -1,26 +1,8 @@
 package com.mongodb.jdbc;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.BasicDBObjectBuilder;
-import com.mongodb.DBCollection;
-import org.junit.Test;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Map;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.*;
-
 public class MongoConnectionTest extends Base {
 
-    MongoConnection _conn;
-
-    public MongoConnectionTest() {
-        super();
-        _conn = new MongoConnection(_db);
-    }
-
+    /*
     @Test
     public void testBasic1() throws SQLException {
 
@@ -91,8 +73,7 @@ public class MongoConnectionTest extends Base {
     }
 
     @Test
-    public void testBasic3()
-            throws SQLException {
+    public void testBasic3() throws SQLException {
 
         String name = "connbasic3";
 
@@ -193,5 +174,5 @@ public class MongoConnectionTest extends Base {
         res.close();
         stmt.close();
     }
-
+    */
 }

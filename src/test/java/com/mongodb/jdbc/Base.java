@@ -1,23 +1,16 @@
 package com.mongodb.jdbc;
 
-import com.mongodb.DB;
-import com.mongodb.DBAddress;
-import com.mongodb.MongoClient;
+import java.sql.Connection;
 
 public abstract class Base {
 
-    private static final String PREFIX = "mongodb://";
+    protected Connection conn;
 
-    final DB _db;
-
-    public Base() {
-        String url = "mongodb://127.0.0.1:27017/test";
-        url = url.substring(PREFIX.length());
+    static {
         try {
-            DBAddress addr = new DBAddress(url);
-            _db = new MongoClient(addr).getDB(addr.getDBName());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            Class.forName("com.mongodb.jdbc.MongoDriver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

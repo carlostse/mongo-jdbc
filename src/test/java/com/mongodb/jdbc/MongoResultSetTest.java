@@ -1,13 +1,7 @@
 package com.mongodb.jdbc;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.BasicDBObjectBuilder;
-import com.mongodb.DBCollection;
-import org.junit.Test;
-import static junit.framework.TestCase.*;
-
 public class MongoResultSetTest extends Base {
-
+    /*
     @Test
     public void testbasic1() {
         DBCollection c = _db.getCollection("rs.basic1");
@@ -52,5 +46,5 @@ public class MongoResultSetTest extends Base {
         assertEquals("bar", res.getString(1));
         assertFalse(res.next());
     }
-
+    */
 }

@@ -16,15 +16,14 @@
 
 package com.mongodb.jdbc;
 
-import com.mongodb.*;
-
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
-import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -32,8 +31,7 @@ import java.util.regex.Pattern;
 
 public class MongoDriver implements Driver {
 
-    private static final String connection_pattern = "jdbc:(mongodb://[^/]+)/(\\w+)";
-    private static final Pattern jdbc_regex = Pattern.compile(connection_pattern);
+    private static final String CONNECTION_PATTERN = "jdbc:(mongodb://[^/]+)/(\\w+)";
 
     static {
         try {
@@ -49,7 +47,7 @@ public class MongoDriver implements Driver {
 
     @Override
     public boolean acceptsURL(String url) {
-        Matcher matcher = jdbc_regex.matcher(url);
+        Matcher matcher = Pattern.compile(CONNECTION_PATTERN).matcher(url);
         return matcher.find();
     }
 
@@ -59,14 +57,15 @@ public class MongoDriver implements Driver {
         if (info != null && info.size() > 0)
             throw new UnsupportedOperationException("properties not supported yet");
 
-        Matcher matcher = jdbc_regex.matcher(url);
+        Matcher matcher = Pattern.compile(CONNECTION_PATTERN).matcher(url);
+
         // If the regular expression matches, returns MongoConnection
         if (matcher.find())
             return new MongoConnection(new MongoClient(new MongoClientURI(matcher.group(1))).getDB(matcher.group(2)));
+
         // Nothing returned, throw exception of invalid connection string
         throw new MongoSQLException("Invalid connection string: " + url);
     }
-
 
     @Override
     public int getMajorVersion() {
