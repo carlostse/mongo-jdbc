@@ -51,6 +51,15 @@ public class MongoDriver implements Driver {
         return matcher.find();
     }
 
+    /**
+     * Get the MongoConnection from connection string.
+     *
+     * Warning: Properties is not supported yet
+     * @param url - connection string
+     * @param info - must be null or empty
+     * @return <class>MongoConnection</class>
+     * @throws SQLException
+     */
     @Override
     public Connection connect(String url, Properties info) throws SQLException {
 
@@ -59,12 +68,14 @@ public class MongoDriver implements Driver {
 
         Matcher matcher = Pattern.compile(CONNECTION_PATTERN).matcher(url);
 
-        // If the regular expression matches, returns MongoConnection
-        if (matcher.find())
-            return new MongoConnection(new MongoClient(new MongoClientURI(matcher.group(1))).getDB(matcher.group(2)));
+        // throw exception if the regular expression does not match,
+        if (!matcher.find())
+            throw new MongoSQLException("Invalid connection string: " + url);
 
-        // Nothing returned, throw exception of invalid connection string
-        throw new MongoSQLException("Invalid connection string: " + url);
+
+        MongoClient client = new MongoClient(new MongoClientURI(matcher.group(1)));
+        return new MongoConnection(client.getDB(matcher.group(2)));
+
     }
 
     @Override

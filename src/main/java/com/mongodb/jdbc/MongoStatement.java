@@ -140,7 +140,7 @@ public class MongoStatement implements Statement {
 
     @Override
     public int executeUpdate(String sql) throws SQLException {
-        return new Executor(_conn._db, sql).writeop();
+        return new Executor(_conn.getDb(), sql).writeop();
     }
 
     @Override
@@ -174,7 +174,7 @@ public class MongoStatement implements Statement {
     public ResultSet executeQuery(String sql) throws SQLException {
         // TODO
         // handle max rows
-        DBCursor cursor = new Executor(_conn._db, sql).query();
+        DBCursor cursor = new Executor(_conn.getDb(), sql).query();
 
         if (_fetchSize > 0)
             cursor.batchSize(_fetchSize);

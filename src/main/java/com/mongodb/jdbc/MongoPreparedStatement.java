@@ -44,11 +44,9 @@ public class MongoPreparedStatement extends MongoStatement implements PreparedSt
     MongoPreparedStatement(MongoConnection conn, int type, int concurrency, int holdability, String sql)
             throws MongoSQLException {
         super(conn, type, concurrency, holdability);
-        _sql = sql;
-        _exec = new Executor(conn._db, sql);
+        _exec = new Executor(conn.getDb(), sql);
     }
 
-    private final String _sql;
     private final Executor _exec;
     private List _params = new ArrayList();
 

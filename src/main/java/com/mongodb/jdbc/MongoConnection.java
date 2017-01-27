@@ -17,7 +17,6 @@
 package com.mongodb.jdbc;
 
 import com.mongodb.DB;
-import com.mongodb.DBCollection;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -40,11 +39,11 @@ import java.util.concurrent.Executor;
 public class MongoConnection implements Connection {
 
     MongoConnection(DB db) {
-        _db = db;
+        this.db = db;
     }
 
-    DB _db;
-    private Properties _clientInfo;
+    private DB db;
+    private Properties clientInfo;
 
     @Override
     public SQLWarning getWarnings() {
@@ -60,12 +59,12 @@ public class MongoConnection implements Connection {
 
     @Override
     public void close() {
-        _db = null;
+        db = null;
     }
 
     @Override
     public boolean isClosed() {
-        return _db == null;
+        return db == null;
     }
 
     // --- commit ----
@@ -162,22 +161,22 @@ public class MongoConnection implements Connection {
 
     @Override
     public Properties getClientInfo() {
-        return _clientInfo;
+        return clientInfo;
     }
 
     @Override
     public String getClientInfo(String name) {
-        return (String) _clientInfo.get(name);
+        return (String) clientInfo.get(name);
     }
 
     @Override
     public void setClientInfo(String name, String value) {
-        _clientInfo.put(name, value);
+        clientInfo.put(name, value);
     }
 
     @Override
     public void setClientInfo(Properties properties) {
-        _clientInfo = properties;
+        clientInfo = properties;
     }
 
     @Override
@@ -191,17 +190,17 @@ public class MongoConnection implements Connection {
 
     @Override
     public int getTransactionIsolation() {
-        throw new RuntimeException("not dont yet");
+        throw new RuntimeException("not done yet");
     }
 
     @Override
     public DatabaseMetaData getMetaData() {
-        throw new RuntimeException("not dont yet");
+        throw new RuntimeException("not done yet");
     }
 
     @Override
     public boolean isValid(int timeout) {
-        return _db != null;
+        return db != null;
     }
 
     @Override
@@ -339,8 +338,7 @@ public class MongoConnection implements Connection {
         return sql;
     }
 
-    public DBCollection getCollection(String name) {
-        return _db.getCollection(name);
+    public DB getDb() {
+        return db;
     }
-
 }

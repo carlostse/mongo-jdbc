@@ -45,38 +45,36 @@ import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.select.SelectExpressionItem;
 import net.sf.jsqlparser.statement.select.SelectItem;
 import net.sf.jsqlparser.statement.update.Update;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.StringReader;
 import java.util.List;
 
 public class Executor {
 
-    static final boolean D = false;
+    private static final Logger logger = LoggerFactory.getLogger(Executor.class);
 
     Executor(DB db, String sql) throws MongoSQLException {
-        _db = db;
-        _sql = sql;
-        _statement = parse(sql);
-
-        if (D) System.out.println(sql);
+        this.db = db;
+        statement = parse(sql);
+        logger.trace(sql);
     }
 
-    private final DB _db;
-    private final String _sql;
-    private final Statement _statement;
-
-    private List _params;
-    private int _pos;
+    private final DB db;
+    private final Statement statement;
+    private List params;
+    private int pos;
 
     void setParams(List params) {
-        _pos = 1;
-        _params = params;
+        pos = 1;
+        this.params = params;
     }
 
     DBCursor query() throws MongoSQLException {
-        if (!(_statement instanceof Select))
+        if (!(statement instanceof Select))
             throw new IllegalArgumentException("not a query sql statement");
 
-        Select select = (Select) _statement;
+        Select select = (Select) statement;
         if (!(select.getSelectBody() instanceof PlainSelect))
             throw new UnsupportedOperationException("can only handle PlainSelect so far");
 
@@ -86,6 +84,7 @@ public class Executor {
 
         DBCollection coll = getCollection((Table) ps.getFromItem());
 
+        // fields
         BasicDBObject fields = new BasicDBObject();
         for (Object o : ps.getSelectItems()) {
             SelectItem si = (SelectItem) o;
@@ -104,10 +103,11 @@ public class Executor {
         // where
         DBObject query = parseWhere(ps.getWhere());
 
+        logger.trace("table: " + coll);
+        logger.trace("fields: " + fields);
+        logger.trace("query: " + query);
+
         // done with basics, build DBCursor
-        if (D) System.out.println("\t" + "table: " + coll);
-        if (D) System.out.println("\t" + "fields: " + fields);
-        if (D) System.out.println("\t" + "query : " + query);
         DBCursor c = coll.find(query, fields);
 
         // limit
@@ -133,16 +133,16 @@ public class Executor {
 
     int writeop() throws MongoSQLException {
 
-        if (_statement instanceof Insert)
-            return insert((Insert) _statement);
+        if (statement instanceof Insert)
+            return insert((Insert) statement);
 
-        if (_statement instanceof Update)
-            return update((Update) _statement);
+        if (statement instanceof Update)
+            return update((Update) statement);
 
-        if (_statement instanceof Drop)
-            return drop((Drop) _statement);
+        if (statement instanceof Drop)
+            return drop((Drop) statement);
 
-        throw new RuntimeException("unknown write: " + _statement.getClass());
+        throw new RuntimeException("unknown write: " + statement.getClass());
     }
 
     int insert(Insert in) throws MongoSQLException {
@@ -151,7 +151,7 @@ public class Executor {
             throw new MongoSQLException.BadSQL("have to give column names to insert");
 
         DBCollection coll = getCollection(in.getTable());
-        if (D) System.out.println("\t" + "table: " + coll);
+        logger.trace("insert table: " + coll);
 
         if (!(in.getItemsList() instanceof ExpressionList))
             throw new UnsupportedOperationException("need ExpressionList");
@@ -190,8 +190,7 @@ public class Executor {
     }
 
     int drop(Drop d) {
-        DBCollection c = _db.getCollection(d.getName());
-        c.drop();
+        db.getCollection(d.getName()).drop();
         return 1;
     }
 
@@ -219,7 +218,7 @@ public class Executor {
             return null;
 
         if (e instanceof JdbcParameter)
-            return _params.get(_pos++);
+            return params.get(pos++);
 
         if (e instanceof Function)
             return e;
@@ -256,6 +255,6 @@ public class Executor {
     // ----
 
     DBCollection getCollection(Table t) {
-        return _db.getCollection(t.toString());
+        return db.getCollection(t.toString());
     }
 }
