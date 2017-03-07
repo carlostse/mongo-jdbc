@@ -72,10 +72,9 @@ public class MongoDriver implements Driver {
         if (!matcher.find())
             throw new MongoSQLException("Invalid connection string: " + url);
 
-
         MongoClient client = new MongoClient(new MongoClientURI(matcher.group(1)));
-        return new MongoConnection(client.getDB(matcher.group(2)));
 
+        return new MongoConnection(client.getDB(matcher.group(2)));
     }
 
     @Override

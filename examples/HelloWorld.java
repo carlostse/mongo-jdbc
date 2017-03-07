@@ -28,7 +28,7 @@ public class HelloWorld {
         System.out.println(name);
         while (rs.next()) {
             System.out.println(
-                    "\t" + rs.getString("email") +
+                    "\t" + rs.getString("name") +
                     "\t" + rs.getInt("age") +
                     "\t" + rs.getObject(0)
             );
@@ -39,6 +39,8 @@ public class HelloWorld {
 
         Class.forName("com.mongodb.jdbc.MongoDriver");
 
+        // The format of the URI is:
+        // jdbc:mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
         Connection c = DriverManager.getConnection("jdbc:mongodb://127.0.0.1:27017,slave:27017/test");
 
         Statement stmt = c.createStatement();
